@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Button,
   TouchableOpacity,
   Text,
   TextInput,
@@ -10,14 +9,17 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
 
 import Colors from "../constants/Colors";
+import * as placeActions from "../store/placeActions";
 
 const ReviewSchema = yup.object({
   title: yup.string().required().min(4, "Minimum 4 characters required"),
 });
 
 const NewPlaceScreen = (props) => {
+  const dispatch = useDispatch();
   // const [titleValue, setTitleValue] = useState("");
 
   // const titleChangeHandler = (text) => {
@@ -25,13 +27,20 @@ const NewPlaceScreen = (props) => {
   //   setTitleValue(text);
   // };
 
-  // const savePlaceHandler = () => {};
+  // const savePlaceHandler = (values) => {
+  //   dispatch(placeActions.addPlace(values));
+  //   props.navigation.goBack();
+  // };
 
   return (
     <Formik
       initialValues={{ title: "" }}
       validationSchema={ReviewSchema}
-      onSubmit={() => {}}
+      onSubmit={(values,action) => {
+        // console.log(values)      
+        dispatch(placeActions.addPlace(values.title));
+        props.navigation.goBack();        
+      }}
     >
       {(formikProps) => (
         <ScrollView style={styles.form}>
@@ -85,7 +94,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: "#1f2a33",
+    color: "black",
   },
   errorText: {
     color: "crimson",

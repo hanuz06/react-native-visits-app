@@ -28,7 +28,7 @@ const PlacesNavigator = createStackNavigator(
         }),
       },
       headerTintColor: Platform.select({
-        android: "#1f2a33",
+        android: "black",
         ios: Colors.primary,
       }),
     },

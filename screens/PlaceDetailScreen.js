@@ -1,14 +1,20 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 const PlaceDetailScreen = (props) => {
   return (
     <View>
-      <Text></Text>
+      <Text>place detail screen</Text>
     </View>
-  )
-}
+  );
+};
 
-export default PlaceDetailScreen
+PlaceDetailScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: navData.navigation.getParam("placeTitle"),
+  };
+};
 
-const styles = StyleSheet.create({})
+export default PlaceDetailScreen;
+
+const styles = StyleSheet.create({});
