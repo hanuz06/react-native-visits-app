@@ -63,7 +63,7 @@ export default ImageSelector;
 
 const styles = StyleSheet.create({
   imageSelector: {
-    alignItems: "center",
+    // alignItems: "center",
     marginBottom: 10
   },
   imagePreview: {

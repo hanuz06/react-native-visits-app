@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   View,
+  Button,
 } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -14,12 +15,13 @@ import { useDispatch } from "react-redux";
 import Colors from "../constants/Colors";
 import * as placeActions from "../store/placeActions";
 import ImageSelector from "../components/ImageSelector";
+import LocationSelector from "../components/LocationSelector";
 
 const ReviewSchema = yup.object({
   title: yup.string().required().min(4, "Minimum 4 characters required"),
 });
 
-const NewPlaceScreen = (props) => {  
+const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
 
   // const [titleValue, setTitleValue] = useState("");
@@ -38,13 +40,13 @@ const NewPlaceScreen = (props) => {
     <Formik
       initialValues={{ title: "", image: "" }}
       validationSchema={ReviewSchema}
-      onSubmit={(values) => {        
+      onSubmit={(values) => {
         dispatch(placeActions.addPlace(values.title, values.image));
         props.navigation.goBack();
       }}
     >
       {(formikProps) => (
-        <ScrollView keyboardShouldPersistTaps='always' style={styles.form}>
+        <ScrollView style={styles.form}>
           <Text style={styles.title}>Title</Text>
           <TextInput
             style={styles.textInput}
@@ -57,12 +59,14 @@ const NewPlaceScreen = (props) => {
             {formikProps.touched.title && formikProps.errors.title}
           </Text>
           <ImageSelector onImageTaken={formikProps.handleChange("image")} />
-          <TouchableOpacity
+          <LocationSelector />
+          {/* <TouchableOpacity
             style={styles.button}
             onPress={formikProps.handleSubmit}
           >
             <Text style={styles.text}>Save</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <Button title="Save" onPress={formikProps.handleSubmit} />
         </ScrollView>
       )}
     </Formik>
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: "black",
+    color: "white",
   },
   errorText: {
     color: "crimson",
