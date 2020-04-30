@@ -13,13 +13,15 @@ import { useDispatch } from "react-redux";
 
 import Colors from "../constants/Colors";
 import * as placeActions from "../store/placeActions";
+import ImageSelector from "../components/ImageSelector";
 
 const ReviewSchema = yup.object({
   title: yup.string().required().min(4, "Minimum 4 characters required"),
 });
 
-const NewPlaceScreen = (props) => {
+const NewPlaceScreen = (props) => {  
   const dispatch = useDispatch();
+
   // const [titleValue, setTitleValue] = useState("");
 
   // const titleChangeHandler = (text) => {
@@ -34,12 +36,11 @@ const NewPlaceScreen = (props) => {
 
   return (
     <Formik
-      initialValues={{ title: "" }}
+      initialValues={{ title: "", image: "" }}
       validationSchema={ReviewSchema}
-      onSubmit={(values,action) => {
-        // console.log(values)      
-        dispatch(placeActions.addPlace(values.title));
-        props.navigation.goBack();        
+      onSubmit={(values) => {        
+        dispatch(placeActions.addPlace(values.title, values.image));
+        props.navigation.goBack();
       }}
     >
       {(formikProps) => (
@@ -55,6 +56,7 @@ const NewPlaceScreen = (props) => {
           <Text style={styles.errorText}>
             {formikProps.touched.title && formikProps.errors.title}
           </Text>
+          <ImageSelector onImageTaken={formikProps.handleChange("image")} />
           <TouchableOpacity
             style={styles.button}
             onPress={formikProps.handleSubmit}
