@@ -44,7 +44,7 @@ const NewPlaceScreen = (props) => {
       }}
     >
       {(formikProps) => (
-        <ScrollView style={styles.form}>
+        <ScrollView keyboardShouldPersistTaps='always' style={styles.form}>
           <Text style={styles.title}>Title</Text>
           <TextInput
             style={styles.textInput}

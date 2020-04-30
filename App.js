@@ -7,6 +7,16 @@ import { StyleSheet, Text, View } from "react-native";
 
 import PlacesNavigator from "./navigation/PlacesNavigator";
 import placeReducer from "./store/placeReducer";
+import { init } from "./db/db";
+
+init()
+  .then(() => {
+    console.log("Inititalized database");
+  })
+  .catch((err) => {
+    console.log("Initializing db failed.");
+    console.log(err);
+  });
 
 const rootReducer = combineReducers({
   places: placeReducer,
