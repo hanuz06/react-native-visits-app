@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
-import APIKEY from "../env";
+import APIKEY from "../env.env";
 
 const MapPreview = (props) => {
   let imagePreviewUrl;
@@ -11,7 +11,7 @@ const MapPreview = (props) => {
 
   return (
     <TouchableOpacity
-      onPress={props.mapView}
+      onPress={props.onPress}
       style={{ ...styles.mapPreview, ...props.style }}
     >
       {props.location ? (

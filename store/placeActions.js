@@ -2,22 +2,26 @@ import * as FileSystem from "expo-file-system";
 
 import { ADD_PLACE, SET_PLACES } from "../types";
 import { insertPlace, fetchPlaces } from "../db/db";
-import APIKEY from "../env";
+import APIKEY from "../env.env";
 
 export const addPlace = (title, image, location) => {
-  // console.log('THIS IS PLACE ACTIONS')
-  return async (dispatch) => {
-    // console.log("THIS IS PLACE ACTION");
+  return async (dispatch) => {   
     const res = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${APIKEY.googleApiKey}`
     );
-
+    
     if (!res.ok) {
       throw new Error("Address cannot be calculated");
     }
-    console.log('REACHED RESDATA')
+
     const resData = await res.json();
-    console.log(resData.results[0].formatted_address);
+    // console.log(resData.results[0].formatted_address);
+
+    if (!resData.results) {
+      throw new Error("Address cannot be calculated! No results.");
+    }
+ 
+    const address = resData.results[0].formatted_address;
 
     const fileName = image.split("/").pop();
     const newPath = FileSystem.documentDirectory + fileName;
@@ -28,21 +32,27 @@ export const addPlace = (title, image, location) => {
         to: newPath,
       });
 
+      // send to database
       const dbRes = await insertPlace(
         title,
         newPath,
-        resData.results[0].formatted_address,
-        15.6,
-        16.8
+        address,
+        location.lat,
+        location.lng
       );
+
+      // send to redux
       dispatch({
         type: ADD_PLACE,
         placeData: {
           id: dbRes.insertId,
           title: title,
           image: newPath,
-          latitude: 15.6,
-          longitude: 16.8,
+          address: address,
+          coordinates: {
+            lat: location.lat,
+            lng: location.lng,
+          },
         },
       });
     } catch (err) {

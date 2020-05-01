@@ -20,12 +20,22 @@ import LocationSelector from "../components/LocationSelector";
 const ReviewSchema = yup.object({
   title: yup.string().required().min(4, "Minimum 4 characters required"),
   image: yup.string().required(),
-  location: yup.object().required(),
+  lat: yup.number().required,
+  lng: yup.number().required,
 });
+
+const CoordsSchema = yup.object({
+  lat: yup.number().required,
+  lng: yup.number().required,
+});
+
+// const locationCoordsSchema = yup.object({
+//   locationCoords: yup.object().required,
+// });
 
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
-  // const [locationCoords, setLocationCoords] = useState({});
+  const [locationCoords, setLocationCoords] = useState({});
   // const [titleValue, setTitleValue] = useState("");
 
   // const titleChangeHandler = (text) => {
@@ -38,19 +48,36 @@ const NewPlaceScreen = (props) => {
   //   props.navigation.goBack();
   // };
 
-  const initialValues = { title: "", image: "", location: {} };
-  
-  const locationPickedHandler = useCallback((locationData) => {    
-    initialValues.location = locationData;
-  }, []);  
+  // locationCoordsSchema
+  //   .isValid(locationCoords)
+
+  const initialValues = { title: "", image: "" };
+
+  const locationPickedHandler = async (locationData) => {
+    // const res = await CoordsSchema.isValid(locationCoords, {
+    //   abortEarly: "Oops, something is wrong!!",
+    // });
+    // console.log("res ", res);
+
+    // initialValues["location"] = locationData;a
+    setLocationCoords(locationData);
+  };
+
+  // useEffect(() => {
+  //   initialValues.location = locationCoords;
+  // }, [initialValues.title, initialValues.image, locationCoords]);
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={ReviewSchema}
-      onSubmit={(values) => {        
+      // validationSchema={ReviewSchema.cast({
+      //   title: initialValues.title,
+      //   image: initialValues.image,
+      // })}
+      onSubmit={(values) => {
+        // console.log("newplaceeeee ", locationCoords);
         dispatch(
-          placeActions.addPlace(values.title, values.image, values.location)
+          placeActions.addPlace(values.title, values.image, locationCoords)
         );
         props.navigation.goBack();
       }}

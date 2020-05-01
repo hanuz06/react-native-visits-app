@@ -81,7 +81,7 @@ const LocationSelector = (props) => {
       <MapPreview
         style={styles.mapPreview}
         location={selectedLocation}
-        mapView={selectOnMapHandler}
+        onPress={selectOnMapHandler}
       >
         {isLoading ? (
           <ActivityIndicator size="large" color={Colors.accent} />

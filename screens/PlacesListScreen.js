@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, Platform, FlatList } from "react-native";
+import { StyleSheet, Platform, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -21,9 +21,9 @@ const PlacesListScreen = (props) => {
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <PlaceItem
-          image={itemData.item.imageUri} 
+          image={itemData.item.imageUri}
           title={itemData.item.title}
-          address={null}
+          address={itemData.item.address}
           onSelect={() => {
             props.navigation.navigate("PlaceDetail", {
               placeTitle: itemData.item.title,
@@ -57,5 +57,3 @@ PlacesListScreen.navigationOptions = (navData) => {
 };
 
 export default PlacesListScreen;
-
-const styles = StyleSheet.create({});
