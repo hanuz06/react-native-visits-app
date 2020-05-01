@@ -59,7 +59,7 @@ const NewPlaceScreen = (props) => {
             {formikProps.touched.title && formikProps.errors.title}
           </Text>
           <ImageSelector onImageTaken={formikProps.handleChange("image")} />
-          <LocationSelector />
+          <LocationSelector navigation={props.navigation} />
           {/* <TouchableOpacity
             style={styles.button}
             onPress={formikProps.handleSubmit}

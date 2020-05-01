@@ -55,20 +55,35 @@ const LocationSelector = (props) => {
     setIsLoading(false);
   };
 
+  const selectOnMapHandler = () => {
+    props.navigation.navigate("Map");
+  };
+
   return (
     <View style={styles.locationSelector}>
-      <MapPreview style={styles.mapPreview} location={selectedLocation}>
+      <MapPreview 
+        style={styles.mapPreview}
+        location={selectedLocation}
+        mapView={selectOnMapHandler}
+      >
         {isLoading ? (
           <ActivityIndicator size="large" color={Colors.accent} />
         ) : (
           <Text>No location chosen yet!</Text>
         )}
       </MapPreview>
-      <Button
-        title="Get user location"
-        color={Colors.primary}
-        onPress={getLocationHandler}
-      />
+      <View style={styles.buttons}>
+        <Button
+          title="Get user location"
+          color={Colors.primary}
+          onPress={getLocationHandler}
+        />
+        <Button
+          title="Select on a map"
+          color={Colors.primary}
+          onPress={selectOnMapHandler}
+        />
+      </View>
     </View>
   );
 };
@@ -86,5 +101,10 @@ const styles = StyleSheet.create({
     height: 150,
     borderWidth: 1,
     borderColor: "#ccc",
+  },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
   },
 });

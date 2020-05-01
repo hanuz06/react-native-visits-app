@@ -1,9 +1,7 @@
-import React from "react";
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 
-import { Platform, SafeAreaView, Button, View } from "react-native";
+import { Platform } from "react-native";
 
 import Colors from "../constants/Colors";
 
