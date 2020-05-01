@@ -3,7 +3,7 @@ import * as FileSystem from "expo-file-system";
 import { ADD_PLACE, SET_PLACES } from "../types";
 import { insertPlace, fetchPlaces } from "../db/db";
 
-export const addPlace = (title, image) => {
+export const addPlace = (title, image, location) => {
   return async (dispatch) => {
     const fileName = image.split("/").pop();
     const newPath = FileSystem.documentDirectory + fileName;
@@ -18,12 +18,12 @@ export const addPlace = (title, image) => {
         title,
         newPath,
         "Dummy Address",
-        15.6,
-        12.3
+        location.lat,
+        location.lng
       );      
       dispatch({
         type: ADD_PLACE,
-        placeData: { id: dbRes.insertId, title: title, image: newPath },
+        placeData: { id: dbRes.insertId, title: title, image: newPath, latitude: location.lat, longitude: location.lng },
       });
     } catch (err) {
       console.log(err);

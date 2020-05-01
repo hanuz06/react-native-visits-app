@@ -37,7 +37,7 @@ const MapScreen = (props) => {
       return;
     }
     props.navigation.navigate("NewPlace", {
-      selectedLocation: selectedLocation,
+      pickedLocation: selectedLocation,
     });
   }, [selectedLocation]);
 
@@ -62,8 +62,7 @@ const MapScreen = (props) => {
     >
       {markerCoords && (
         <Marker
-          draggable
-          onDragEnd={selectedLocationHandler}
+          draggable          
           coordinate={markerCoords}
           title="Selected location"
         ></Marker>

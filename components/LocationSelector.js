@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,17 @@ import MapPreview from "./MapPreview";
 const LocationSelector = (props) => {
   const [selectedLocation, setSelectedLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  // "pickedLocation" navigation param came from MapScreen via NewPlaceScreen
+  const mapSelectedLocation = props.navigation.getParam("pickedLocation");
+
+  const { onLocationSelected } = props;
+  useEffect(() => {
+    if (mapSelectedLocation) {
+      setSelectedLocation(mapSelectedLocation);
+      onLocationSelected(mapSelectedLocation);
+    }
+  }, [mapSelectedLocation]);
 
   // this configuration is required for ios, not for android
   const verifyPermission = async () => {
@@ -45,6 +56,10 @@ const LocationSelector = (props) => {
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       });
+      props.onLocationSelected({
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      });
     } catch (err) {
       Alert.alert(
         "Could not get location!",
@@ -61,7 +76,7 @@ const LocationSelector = (props) => {
 
   return (
     <View style={styles.locationSelector}>
-      <MapPreview 
+      <MapPreview
         style={styles.mapPreview}
         location={selectedLocation}
         mapView={selectOnMapHandler}
