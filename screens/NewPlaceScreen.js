@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -19,12 +19,13 @@ import LocationSelector from "../components/LocationSelector";
 
 const ReviewSchema = yup.object({
   title: yup.string().required().min(4, "Minimum 4 characters required"),
-  image: yup.string().required()
+  image: yup.string().required(),
+  location: yup.object().required(),
 });
 
 const NewPlaceScreen = (props) => {
   const dispatch = useDispatch();
-
+  // const [locationCoords, setLocationCoords] = useState({});
   // const [titleValue, setTitleValue] = useState("");
 
   // const titleChangeHandler = (text) => {
@@ -37,19 +38,21 @@ const NewPlaceScreen = (props) => {
   //   props.navigation.goBack();
   // };
 
-  const locationPickedHandler = useCallback((location) => {
-    console.log(location)
-  },[])
+  const initialValues = { title: "", image: "", location: {} };
   
+  const locationPickedHandler = useCallback((locationData) => {    
+    initialValues.location = locationData;
+  }, []);  
 
   return (
     <Formik
-      initialValues={{ title: "", image: "", location: {} }}
+      initialValues={initialValues}
       validationSchema={ReviewSchema}
-      onSubmit={(values) => {
-        dispatch(placeActions.addPlace(values.title, values.image, values.location));
+      onSubmit={(values) => {        
+        dispatch(
+          placeActions.addPlace(values.title, values.image, values.location)
+        );
         props.navigation.goBack();
-        console.log(values)
       }}
     >
       {(formikProps) => (
@@ -66,7 +69,10 @@ const NewPlaceScreen = (props) => {
             {formikProps.touched.title && formikProps.errors.title}
           </Text>
           <ImageSelector onImageTaken={formikProps.handleChange("image")} />
-          <LocationSelector navigation={props.navigation} onLocationSelected={formikProps.handleChange("location")}/>
+          <LocationSelector
+            navigation={props.navigation}
+            onLocationSelected={locationPickedHandler}
+          />
           {/* <TouchableOpacity
             style={styles.button}
             onPress={formikProps.handleSubmit}

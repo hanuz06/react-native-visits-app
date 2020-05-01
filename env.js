@@ -1,5 +1,5 @@
 const apiKey = {
-  googleApiKey: "AIzaSyBkLH3oQi-c2G73uMcvqsMmLMda4pwA7d4",
+  googleApiKey: "AIzaSyCQmw-wvhVG3dYRlowQZDNxUerJpbUkHJ0",
 };
 
 export default apiKey;

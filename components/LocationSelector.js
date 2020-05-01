@@ -41,7 +41,7 @@ const LocationSelector = (props) => {
     return true;
   };
 
-  const getLocationHandler = async () => {
+  const getLocationHandler = async (e) => {
     const hasPermission = await verifyPermission();
     if (!hasPermission) {
       return;
@@ -52,11 +52,13 @@ const LocationSelector = (props) => {
       const location = await Location.getCurrentPositionAsync({
         timeout: 5000,
       });
+
       setSelectedLocation({
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       });
-      props.onLocationSelected({
+
+      onLocationSelected({
         lat: location.coords.latitude,
         lng: location.coords.longitude,
       });
