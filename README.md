@@ -27,19 +27,23 @@ In the opened new window (usually on localhost:19002), click on the "Run on $(yo
 
 ### The front screen with no added places
 
-!["Front screen with no added places"](https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/all-places.png?raw=true)
+<img src="https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/front-screen-no-added-places.png?raw=true" width="292" height="500">
+
+### The front screen with added places
+
+<img src="https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/all-places.png?raw=true" width="292" height="500">
 
 ### Place details screen 
 
-!["Place details screen"](https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/calgary-tower.png?raw=true)
+<img src="https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/calgary-tower.png?raw=true" width="292" height="500">
 
 ### Place delete alert 
 
-!["Place delete alert"](https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/Screenshot%20from%202020-05-03%2018-23-31.png?raw=true)
+<img src="https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/Screenshot%20from%202020-05-03%2018-23-31.png?raw=true" width="292" height="500">
 
 ### Map screen
 
-!["Map screen"](https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/map.png?raw=true)
+<img src="https://github.com/hanuz06/react-native-visits-app/blob/master/assets/images/map.png?raw=true" width="292" height="500">
 
 
 ## Dependencies
