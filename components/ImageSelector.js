@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { StyleSheet, Text, View, Button, Image, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
 import Colors from "../constants/Colors";
 
-const ImageSelector = (props) => {
+const ImageSelector = ({ onImageTaken }) => {
   const [pickedImage, setPickedImage] = useState();
 
   // this configuration is required for ios, not for android
@@ -37,15 +38,19 @@ const ImageSelector = (props) => {
       quality: 0.5,
     });
 
+    if (!image.uri) {
+      return;
+    }
+
+    onImageTaken(image.uri);
     setPickedImage(image.uri);
-    props.onImageTaken(image.uri);
   };
 
   return (
     <View style={styles.imageSelector}>
       <View style={styles.imagePreview}>
         {!pickedImage ? (
-          <Text>No image taken yet.</Text>
+          <Text style={styles.text}>No image taken yet.</Text>
         ) : (
           <Image style={styles.image} source={{ uri: pickedImage }} />
         )}
@@ -63,8 +68,7 @@ export default ImageSelector;
 
 const styles = StyleSheet.create({
   imageSelector: {
-    // alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
   imagePreview: {
     width: "100%",
@@ -73,10 +77,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderColor: "#ccc",
-    borderWidth: 1,    
+    borderWidth: 1,
   },
   image: {
     width: "100%",
     height: "100%",
   },
+  text: {
+    fontFamily: "montserrat-regular",
+  },
 });
+
+ImageSelector.propTypes = {
+  onImageTaken: PropTypes.func.isRequired,
+};

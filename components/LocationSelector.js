@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   StyleSheet,
   Text,
@@ -12,14 +13,13 @@ import * as Permissions from "expo-permissions";
 import Colors from "../constants/Colors";
 import MapPreview from "./MapPreview";
 
-const LocationSelector = (props) => {
+const LocationSelector = ({ onLocationSelected, navigation }) => {
   const [selectedLocation, setSelectedLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   // "pickedLocation" navigation param came from MapScreen via NewPlaceScreen
-  const mapSelectedLocation = props.navigation.getParam("pickedLocation");
+  const mapSelectedLocation = navigation.getParam("pickedLocation");
 
-  const { onLocationSelected } = props;
   useEffect(() => {
     if (mapSelectedLocation) {
       setSelectedLocation(mapSelectedLocation);
@@ -73,7 +73,7 @@ const LocationSelector = (props) => {
   };
 
   const selectOnMapHandler = () => {
-    props.navigation.navigate("Map");
+    navigation.navigate("Map");
   };
 
   return (
@@ -86,7 +86,7 @@ const LocationSelector = (props) => {
         {isLoading ? (
           <ActivityIndicator size="large" color={Colors.accent} />
         ) : (
-          <Text>No location chosen yet!</Text>
+          <Text style={styles.text}>No location chosen yet!</Text>
         )}
       </MapPreview>
       <View style={styles.buttons}>
@@ -124,4 +124,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
   },
+  text: {
+    fontFamily: "montserrat-regular",
+  },
 });
+
+LocationSelector.propTypes = {
+  onLocationSelected: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+};

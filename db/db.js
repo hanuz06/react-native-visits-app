@@ -26,8 +26,8 @@ export const insertPlace = (title, imageUri, address, lat, lng) => {
       tx.executeSql(
         `INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?,?,?,?,?);`,
         [title, imageUri, address, lat, lng],
-        (_, result) => {
-          resolve(result);
+        (_, res) => {
+          resolve(res);
         },
         (_, err) => {
           reject(err);
@@ -44,8 +44,26 @@ export const fetchPlaces = () => {
       tx.executeSql(
         `SELECT * FROM places`,
         [],
-        (_, result) => {
-          resolve(result);
+        (_, res) => {
+          resolve(res);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+export const removePlace = (id) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "DELETE FROM places WHERE id=?",
+        [id],
+        (_, res) => {
+          resolve(res);
         },
         (_, err) => {
           reject(err);

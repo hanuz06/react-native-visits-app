@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, Image, Text, View, ScrollView } from "react-native";
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 import MapPreview from "../components/MapPreview";
 
-const PlaceDetailScreen = (props) => {
-  const placeId = props.navigation.getParam("placeId");
+const PlaceDetailScreen = ({ navigation }) => {
+  const placeId = navigation.getParam("placeId");
   const selectedPlace = useSelector((state) =>
     state.places.places.find((place) => place.id === placeId)
   );
@@ -14,7 +15,7 @@ const PlaceDetailScreen = (props) => {
 
   const mapDetailsHandler = () => {
     // console.log(props.navigation);
-    props.navigation.navigate("Map", {
+    navigation.navigate("Map", {
       readOnly: true,
       initialLocation: selectedLocation,
     });
@@ -59,10 +60,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     shadowColor: "black",
     shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 12 },
+    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     elevation: 5,
-    backgroundColor: "white",
     borderRadius: 10,
     backgroundColor: "#ccc",
   },
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+    fontFamily: "montserrat-bold",
   },
   mapPreview: {
     width: "100%",
@@ -83,3 +84,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
 });
+
+PlaceDetailScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

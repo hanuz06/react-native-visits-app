@@ -6,18 +6,19 @@ import {
   Platform,
   Alert,
 } from "react-native";
+import PropTypes from "prop-types";
 import MapView, { Marker } from "react-native-maps";
 
 import Colors from "../constants/Colors";
 
-const MapScreen = (props) => {
-  const initialLocation = props.navigation.getParam("initialLocation");
-  const readOnly = props.navigation.getParam("readOnly");
+const MapScreen = ({ navigation }) => {
+  const initialLocation = navigation.getParam("initialLocation");
+  const readOnly = navigation.getParam("readOnly");
   const [selectedLocation, setSelectedLocation] = useState(initialLocation);
 
   const mapRegion = {
-    latitude: initialLocation ? initialLocation.lat : 37.497879,
-    longitude: initialLocation ? initialLocation.lng : 127.027027,
+    latitude: initialLocation ? initialLocation.lat : 51.04427,
+    longitude: initialLocation ? initialLocation.lng : -114.062019,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -42,13 +43,13 @@ const MapScreen = (props) => {
       );
       return;
     }
-    props.navigation.navigate("NewPlace", {
+    navigation.navigate("NewPlace", {
       pickedLocation: selectedLocation,
     });
   }, [selectedLocation]);
 
   useEffect(() => {
-    props.navigation.setParams({ saveLocation: saveSelectedLocationHandler });
+    navigation.setParams({ saveLocation: saveSelectedLocationHandler });
   }, [saveSelectedLocationHandler]);
 
   let markerCoords;
@@ -110,3 +111,7 @@ const styles = StyleSheet.create({
     color: Platform.select({ android: "white", ios: Colors.primary }),
   },
 });
+
+MapScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   Text,
   TextInput,
-  View,
+  Alert,
   Button,
 } from "react-native";
-import { Formik } from "formik";
+import { Formik, ErrorMessage } from "formik";
+import PropTypes from "prop-types";
 import * as yup from "yup";
 import { useDispatch } from "react-redux";
 
@@ -19,67 +19,37 @@ import LocationSelector from "../components/LocationSelector";
 
 const ReviewSchema = yup.object({
   title: yup.string().required().min(4, "Minimum 4 characters required"),
-  image: yup.string().required(),
-  lat: yup.number().required,
-  lng: yup.number().required,
+  image: yup.string().required("Image required"),
 });
 
-const CoordsSchema = yup.object({
-  lat: yup.number().required,
-  lng: yup.number().required,
-});
-
-// const locationCoordsSchema = yup.object({
-//   locationCoords: yup.object().required,
-// });
-
-const NewPlaceScreen = (props) => {
-  const dispatch = useDispatch();
+const NewPlaceScreen = ({ navigation }) => {
   const [locationCoords, setLocationCoords] = useState({});
-  // const [titleValue, setTitleValue] = useState("");
+  const dispatch = useDispatch();
 
-  // const titleChangeHandler = (text) => {
-  //   // you could add validation
-  //   setTitleValue(text);
-  // };
-
-  // const savePlaceHandler = (values) => {
-  //   dispatch(placeActions.addPlace(values));
-  //   props.navigation.goBack();
-  // };
-
-  // locationCoordsSchema
-  //   .isValid(locationCoords)
-
-  const initialValues = { title: "", image: "" };
-
-  const locationPickedHandler = async (locationData) => {
-    // const res = await CoordsSchema.isValid(locationCoords, {
-    //   abortEarly: "Oops, something is wrong!!",
-    // });
-    // console.log("res ", res);
-
-    // initialValues["location"] = locationData;a
+  const locationPickedHandler = (locationData) => {
     setLocationCoords(locationData);
   };
 
-  // useEffect(() => {
-  //   initialValues.location = locationCoords;
-  // }, [initialValues.title, initialValues.image, locationCoords]);
-
   return (
     <Formik
-      initialValues={initialValues}
-      // validationSchema={ReviewSchema.cast({
-      //   title: initialValues.title,
-      //   image: initialValues.image,
-      // })}
+      initialValues={{
+        title: "",
+        image: "",
+      }}
+      validationSchema={ReviewSchema}
       onSubmit={(values) => {
-        // console.log("newplaceeeee ", locationCoords);
+        if (Object.keys(locationCoords).length === 0) {
+          Alert.alert(
+            "Location not selected!",
+            "Please select location on the map",
+            [{ text: "OK" }]
+          );
+          return;
+        }
         dispatch(
           placeActions.addPlace(values.title, values.image, locationCoords)
         );
-        props.navigation.goBack();
+        navigation.goBack();
       }}
     >
       {(formikProps) => (
@@ -93,20 +63,23 @@ const NewPlaceScreen = (props) => {
             onBlur={formikProps.handleBlur("title")}
           />
           <Text style={styles.errorText}>
-            {formikProps.touched.title && formikProps.errors.title}
+            {" "}
+            <ErrorMessage name="title" />
           </Text>
           <ImageSelector onImageTaken={formikProps.handleChange("image")} />
+          <Text style={styles.errorText}>
+            {" "}
+            <ErrorMessage name="image" />
+          </Text>
           <LocationSelector
-            navigation={props.navigation}
+            navigation={navigation}
             onLocationSelected={locationPickedHandler}
           />
-          {/* <TouchableOpacity
-            style={styles.button}
+          <Button
+            title="Save"
+            color={Colors.primary}
             onPress={formikProps.handleSubmit}
-          >
-            <Text style={styles.text}>Save</Text>
-          </TouchableOpacity> */}
-          <Button title="Save" onPress={formikProps.handleSubmit} />
+          />
         </ScrollView>
       )}
     </Formik>
@@ -126,6 +99,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     marginBottom: 15,
+    fontFamily: "montserrat-regular",
   },
   textInput: {
     borderBottomColor: "#ccc",
@@ -150,3 +124,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
+NewPlaceScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

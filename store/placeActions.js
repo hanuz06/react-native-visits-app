@@ -1,26 +1,25 @@
 import * as FileSystem from "expo-file-system";
 
-import { ADD_PLACE, SET_PLACES } from "../types";
-import { insertPlace, fetchPlaces } from "../db/db";
+import { ADD_PLACE, SET_PLACES, DELETE_PLACE } from "../types";
+import { insertPlace, fetchPlaces, removePlace } from "../db/db";
 import APIKEY from "../env.env";
 
 export const addPlace = (title, image, location) => {
-  return async (dispatch) => {   
+  return async (dispatch) => {
     const res = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${APIKEY.googleApiKey}`
     );
-    
+
     if (!res.ok) {
       throw new Error("Address cannot be calculated");
     }
 
     const resData = await res.json();
-    // console.log(resData.results[0].formatted_address);
 
     if (!resData.results) {
       throw new Error("Address cannot be calculated! No results.");
     }
- 
+
     const address = resData.results[0].formatted_address;
 
     const fileName = image.split("/").pop();
@@ -66,6 +65,7 @@ export const loadPlaces = () => {
   return async (dispatch) => {
     try {
       const dbRes = await fetchPlaces();
+
       dispatch({
         type: SET_PLACES,
         places: dbRes.rows._array,
@@ -73,5 +73,13 @@ export const loadPlaces = () => {
     } catch (err) {
       throw err;
     }
+  };
+};
+
+export const deletePlace = (id) => {
+  return async (dispatch) => {
+    await removePlace(parseInt(id));
+    await dispatch({ type: DELETE_PLACE, id });
+    loadPlaces();
   };
 };
